@@ -1,6 +1,6 @@
 Dungeon Crawler RL
 
-    This project is a custom Reinforcement Learning environment of a dungeon crawler game. The agent learns to navigate a dungeon while avoiding lava pits, collect loot, defeat bosses, and save the princess. Using Gymnasium and Pygame, the environment is built to simulate the game dynamics. Unlike standard grid worlds which typically involve simple navigation (Point A to Point B), this environment introduces state dependencies and combat logic. 
+   This project is a custom Reinforcement Learning environment of a dungeon crawler game. The agent learns to navigate a dungeon while avoiding lava pits, collect loot, defeat bosses, and save the princess. Using Gymnasium and Pygame, the environment is built to simulate the game dynamics. Unlike standard grid worlds which typically involve simple navigation (Point A to Point B), this environment introduces state dependencies and combat logic. 
 
 Environment Design
 
@@ -21,7 +21,8 @@ MAP = [
 ]
 ```
 ````
-    The environment is built on a 7x7 grid containing:
+
+The environment is built on a 7x7 grid containing:
     •	Walls (|, -): Impassable barriers defining the ground layout.
     •	Restricted Areas (R): "Lava" tiles.
     •	Entities:
