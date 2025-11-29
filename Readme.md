@@ -1,5 +1,4 @@
 Dungeon Crawler RL
-
     Bu proje, bir zindan keşfi oyununa ait özel bir Pekiştirmeli Öğrenme (Reinforcement Learning) ortamıdır. Ajan; lav çukurlarından kaçınırken zindanda gezinmeyi, ganimet toplamayı, mini-bossları ve ana bossu yenmeyi ve prensesi kurtarmayı öğrenir. Gymnasium ve Pygame kullanılarak, oyun dinamiklerini simüle eden bir ortam oluşturulmuştur. Basit ızgara dünyalarının (A noktasından B noktasına gitme) aksine, bu ortam durum bağımlılıkları ve savaş mantığını içerir.
 
 - Ortam (ENV) Tasarımı:
