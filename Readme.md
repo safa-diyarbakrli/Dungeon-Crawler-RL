@@ -60,8 +60,8 @@ Toplam: 49 × 4 × 4 × 4 × 2 × 2 × 2 = 25.088
  -   Ana boss ölmeden bitişe gitme: -20
  -   Ölme: -20
  - Shaping Reward: Bu, oyuncunun pozisyonuna göre ödül veren ve onu hedefe doğru iten bir fonksiyondur. Bu fonksiyon olmadan kodum saatlerce çalışıyordu.
- -   Bitiş çizgisine yaklaşan her adım: +0.5
- -   Uzaklaşan her adım: -0.6
+     o   Bitiş çizgisine yaklaşan her adım: +0.5
+     o   Uzaklaşan her adım: -0.6
 
 - Aksiyonlar: 
 Toplam 5 aksiyon vardır:
