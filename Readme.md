@@ -1,10 +1,8 @@
 Dungeon Crawler RL
 
-    This project is a custom Reinforcement Learning environment of a dungeon crawler game. The agent learns to navigate a dungeon while avoiding lava pits, collect loot, defeat bosses, and save the princess. Using Gymnasium and Pygame, the environment is built to simulate the game dynamics. Unlike standard grid worlds which typically involve simple navigation (Point A to Point B), this environment introduces state dependencies and combat logic. 
+    Bu proje, bir zindan keşfi oyununa ait özel bir Pekiştirmeli Öğrenme (Reinforcement Learning) ortamıdır. Ajan; lav çukurlarından kaçınırken zindanda gezinmeyi, ganimet toplamayı, mini-bossları ve ana bossu yenmeyi ve prensesi kurtarmayı öğrenir. Gymnasium ve Pygame kullanılarak, oyun dinamiklerini simüle eden bir ortam oluşturulmuştur. Basit ızgara dünyalarının (A noktasından B noktasına gitme) aksine, bu ortam durum bağımlılıkları ve savaş mantığını içerir.
 
-Environment Design
-
-- The Map
+- Ortam (ENV) Tasarımı:
 
 ````
 ```
@@ -21,66 +19,70 @@ MAP = [
 ]
 ```
 ````
-    The environment is built on a 7x7 grid containing:
-    •	Walls (|, -): Impassable barriers defining the ground layout.
-    •	Restricted Areas (R): "Lava" tiles.
-    •	Entities:
-        o	Player (P): The learning agent.
-        o	Loot (L): A weapon required to damage the main boss.
-        o	Mini-Boss (M): An enemy that grants a damage power-up.
-        o	Main Boss (B): The primary antagonist blocking the victory condition.
-        o   Restricted Area (R): "Lava" tiles that the player cannot pass.
-        o	Finish Line (F): The exit point where the princess is waiting to get rescued.
-         
-State  
-  The game has 25,088 possible states .The logic behind it:
-    •	Player Position: 49 possible positions (7x7 grid).
-    •	Health levels : 4 possible health levels (0, 1, 2, 3).
-    •	Mini-Boss Position: 4 possible positions .
-    •	Main Boss Position: 4 possible positions .
-    •   Loot Status: 2 possible states (collected or not).
-    •   Mini-Boss Status: 2 possible states (alive or dead).
-    •   Main Boss Status: 2 possible states (alive or dead).
-so the total number of states is 49 * 4 * 4 * 4 * 2 * 2 * 2 = 25,088
 
+Ortam 7x7'lik bir ızgara üzerinde kuruludur ve aşağıdakileri içerir:
+
+-   Duvarlar (`|`, `-`): Geçilemeyen engeller.
+-   Kısıtlı Alanlar (R): "Lava" karoları.
+-   Varlıklar:
+    -   Oyuncu (P): Öğrenen ajan.
+    -   Ganimet (L): Ana boss'a zarar verebilmek için gerekli silah.
+    -   Mini-Boss (M): Yenildiğinde güç artışı sağlar.
+    -   Ana Boss (B): Oyunun bitiş koşulunu engelleyen ana düşman.
+    -   Kısıtlı Alan (R): Oyuncunun geçemeyeceği "lav" karoları.
+    -   Bitiş Noktası (F): Prensesin bulunduğu çıkış.
+
+Durum (State):
+
+Oyunda 25.088 olası durum bulunmaktadır:
+
+-   Oyuncu Pozisyonu: 49
+-   Sağlık Seviyeleri: 4
+-   Mini-Boss Pozisyonu: 4
+-   Ana Boss Pozisyonu: 4
+-   Ganimet Durumu: 2
+-   Mini-Boss Durumu: 2
+-   Ana Boss Durumu: 2
+
+Toplam: 49 × 4 × 4 × 4 × 2 × 2 × 2 = 25.088
 
   ![res1](dungeon_animation.gif)
 
-- Reward system:
-    The reward system is as follows:
-    - -1 for each time step taken
-    - +10 for collecting the loot
-    - +10 for defeating the mini-boss
-    - +20 for defeating the main boss
-    - +30 for saving the princess
-    - -2 for wasted attack
-    - -15 for fighting any boss without the needed requirements 
-    - -20 for going to save the proncess without killing the boss
-    - -20 for dying 
-    - shaping reward: this is a function that gives a reward based on the player's position and pushes it towards the objective.Without this function my code was spairling for hours.   
-        o	+0.5  for each step taken to reach the finish line
-        o	-0.6 for each step taken away from the finish line
+-Ödül Sistemi:
 
-- Actions:
-  There are 5 actions:
-    0: move south
-    1: move north
-    2: move east
-    3: move west
-    4: attack
+    -   Her adım: -1
+    -   Ganimet toplama: +10
+    -   Mini-boss yenme: +10
+    -   Ana boss yenme: +20
+    -   Prensesi kurtarma: +30
+    -   Boşa saldırı: -2
+    -   Gereksiz savaş başlatma: -15
+    -   Ana boss ölmeden bitişe gitme: -20
+    -   Ölme: -20
+    - Shaping Reward: Bu, oyuncunun pozisyonuna göre ödül veren ve onu hedefe doğru iten bir fonksiyondur. Bu fonksiyon olmadan kodum saatlerce çalışıyordu.
+    -   Bitiş çizgisine yaklaşan her adım: +0.5
+    -   Uzaklaşan her adım: -0.6
 
-- Game's Logic:
-    •	Movement: The player can move in four directions (south, north, east, west) if the target tile is not a wall.
-    •	Attacking: The player can attack any enemy (mini-boss, main boss) if they are in the same tile.However to have a succesfull attack the player needs to follow a certain order; fist they need to get the loot which is a weapon that later will help them defeat the mini boss. Only after defeating the mini boss and get the reward can the player defeat main boos.
-    if the player tries to attack the mini-boss without getting the loot first they will get punished with a penalty of -15.Same thing if the player tries to attack the main boss without getting the mini-boss first.(Loot --> Mini-Boss --> Main Boss --> Finish)
+- Aksiyonlar: 
+Toplam 5 aksiyon vardır:
 
-    •	Health Management:
-        o	If the player attacks the main boss or the mini boss without the required power-ups , they lose 2 health points.
-        o	If the player's health drops to 0, they die, and the episode ends.
+    0: güneye
+    1: kuzeye
+    2: doğuya
+    3: batıya
+    4: saldır
 
-    - Finishing the game:
-    o	If the player reaches the finish line (save the princess) before defeating the main boss, they get a penalty of 20 points.
-    o	If the player reaches the finish line (save the princess) after defeating the main boss, they get a reward of 30 points.    
+- Oyun Mantığı:
+    • Hareket: Hedef kare duvar değilse, oyuncu dört yönde (güney, kuzey, doğu, batı) hareket edebilir.
+    • Saldırı: Oyuncu, aynı karede bulunan herhangi bir düşmana (mini boss, ana boss) saldırabilir. Ancak başarılı bir saldırı için oyuncunun belirli bir sırayı izlemesi gerekir; önce mini boss'u yenmesine yardımcı olacak bir silah olan ganimeti alması gerekir. Ancak mini boss'u yenip ödülü aldıktan sonra oyuncu ana boss'u yenebilir.
+    Oyuncu, ganimeti almadan mini boss'a saldırmaya çalışırsa -15 ceza alır. Aynı durum, mini boss'u almadan ana boss'a saldırmaya çalışırsa da geçerlidir. (Ganimet --> Mini Boss --> Ana Boss --> Bitiriş)
+
+    • Sağlık Yönetimi:
+    o Oyuncu, gerekli güçlendirmeler olmadan ana boss'a veya mini boss'a saldırırsa 2 sağlık puanı kaybeder. o Oyuncunun canı 0'a düşerse ölür ve bölüm sona erer.
+
+    • Oyunu Bitirme:
+        o Oyuncu, ana boss'u yenmeden bitiş çizgisine ulaşırsa (prenses kurtarırsa), 20 puan ceza alır.
+        o Oyuncu, ana boss'u yendikten sonra bitiş çizgisine ulaşırsa (prenses kurtarırsa), 30 puan ödül alır.
 
 - Hyperparameters:
     o Alpha (Learning Rate): 0.1
@@ -88,30 +90,31 @@ so the total number of states is 49 * 4 * 4 * 4 * 2 * 2 * 2 = 25,088
     o Epsilon (Exploration Rate): 0.05
     o Number of Episodes: 100,000
     o Max Steps per Episode: 200
-    alpha = 0.1
 
-- Q-Learning algorithm:
-  The project implements the Q-Learning algorithm to train the player. The algorithm updates the Q-values based on the rewards received and the player's actions. The Q-Table is saved to a CSV file for future use without re-training.
+- Q-Learning algoritması:
+Proje, oyuncuyu eğitmek için Q-Learning algoritmasını kullanır. Algoritma, alınan ödüllere ve oyuncunun eylemlerine göre Q-değerlerini günceller. Q-Tablosu, yeniden eğitime gerek kalmadan gelecekte kullanılmak üzere bir CSV dosyasına kaydedilir.
 
-- Evaluation: 
-  The agent is evaluated every 300 episodes during training. Then, tracks and saves the best model based on cumulative reward. Finally, it plots the cumulative reward over time and the loss over time.
-  
-How to run:
-1. Open the Jupyter Notebook game.ipynb.
-2. Run the cells containing the GameEnv class definition and the visualization methods.
-3. Run the Training cell.
-   o This will train the agent for 100,000 episodes.
-   o It will automatically save the best Q-Table to q_table_best.csv.
-4. Test policy performance after training:
-   o Run the Testing cell.
-   o This will load the Q-Table from q_table_best.csv and run the agent in the environment.
-   o It will display the final reward and a visualization of the agent's path.
+- Değerlendirme:
+Etken, eğitim sırasında her 300 bölümde bir değerlendirilir. Ardından, kümülatif ödüle göre en iyi modeli izler ve kaydeder. Son olarak, kümülatif ödülü zaman içinde ve kaybı zaman içinde çizer.
 
-- Results:
+- Nasıl çalıştırılır:
+    Ajanı sıfırdan eğitmek için:
+
+   1. game.ipynb Jupyter Notebook dosyasını açın.
+   2. GameEnv sınıfı tanımını ve görselleştirme yöntemlerini içeren hücreleri çalıştırın.
+   3. Eğitim hücresini çalıştırın.
+        o Bu işlem ajanı 100,000 bölüm boyunca eğitir.
+        o En iyi Q-Tablosunu otomatik olarak game_q_table.csv dosyasına kaydeder.
+    4. Eğitimden sonra politika performansını test etmek için:
+        o Test hücresini çalıştırın.
+        o  Bu işlem CSV dosyasından Q-Tablosunu yükler ve ajanı ortamda çalıştırır.
+        o Son ödülü ve ajanın yolunun görselleştirmesini görüntüler.
+
+- Sonuçlar:
+
 
   ![res1](res1.png)
 
-
   ![res2](res2.png)
 
-The training process was conducted over 100,000 episodes. The results show that the agent was successfully trained to navigate the environment, achieving its best cumulative reward of 66.9 at Episode 20575.
+  Eğitim süreci 100.000 bölüm boyunca gerçekleştirildi. Sonuçlar, ajanın ortamda gezinmek üzere başarıyla eğitildiğini ve 20575. Bölümde 66,9 puanlık en iyi kümülatif ödüle ulaştığını gösteriyor.
