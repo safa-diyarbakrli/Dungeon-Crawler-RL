@@ -50,18 +50,18 @@ Toplam: 49 × 4 × 4 × 4 × 2 × 2 × 2 = 25.088
 
 -Ödül Sistemi:
 
-    -   Her adım: -1
-    -   Ganimet toplama: +10
-    -   Mini-boss yenme: +10
-    -   Ana boss yenme: +20
-    -   Prensesi kurtarma: +30
-    -   Boşa saldırı: -2
-    -   Gereksiz savaş başlatma: -15
-    -   Ana boss ölmeden bitişe gitme: -20
-    -   Ölme: -20
-    - Shaping Reward: Bu, oyuncunun pozisyonuna göre ödül veren ve onu hedefe doğru iten bir fonksiyondur. Bu fonksiyon olmadan kodum saatlerce çalışıyordu.
-    -   Bitiş çizgisine yaklaşan her adım: +0.5
-    -   Uzaklaşan her adım: -0.6
+ -   Her adım: -1
+ -   Ganimet toplama: +10
+ -   Mini-boss yenme: +10
+ -   Ana boss yenme: +20
+ -   Prensesi kurtarma: +30
+ -   Boşa saldırı: -2
+ -   Gereksiz savaş başlatma: -15
+ -   Ana boss ölmeden bitişe gitme: -20
+ -   Ölme: -20
+ - Shaping Reward: Bu, oyuncunun pozisyonuna göre ödül veren ve onu hedefe doğru iten bir fonksiyondur. Bu fonksiyon olmadan kodum saatlerce çalışıyordu.
+ -   Bitiş çizgisine yaklaşan her adım: +0.5
+ -   Uzaklaşan her adım: -0.6
 
 - Aksiyonlar: 
 Toplam 5 aksiyon vardır:
